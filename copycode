@@ -1,0 +1,154 @@
+#include <Wire.h>
+#include <TimeLib.h>
+#include <DS1307RTC.h>
+#include <LiquidCrystal_I2C.h>
+// Set the LCD address to 0x27 for a 16 chars and 2 line display
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+int dayofweek = 1;
+void setup() 
+{
+// ### Serial Setup code ###
+Serial.begin(9600);
+  while (!Serial) ; // wait for serial
+  delay(200);
+  Serial.println(“DS1307RTC Read Test”);
+  Serial.println(“——————-“);
+// ### Sercal code setup end ###
+// ## LCD Setup ###
+// initialize the LCD
+   lcd.begin();
+// Turn on the blacklight and print a message.
+    lcd.backlight();
+    lcd.clear();
+// ### LCD Setup END ##
+}
+void loop() 
+{
+tmElements_t tm;
+//### Serial Code ###
+  if (RTC.read(tm)) 
+    {
+/*
+  Serial.print(“Ok, Time = “);
+  print2digits(tm.Hour);
+  Serial.write(‘:’);
+  print2digits(tm.Minute);
+  Serial.write(‘:’);
+  print2digits(tm.Second);
+  Serial.print(“, Date (D/M/Y) = “);
+  Serial.print(tm.Day);
+  Serial.write(‘/’);
+  Serial.print(tm.Month);
+  Serial.write(‘/’);
+  Serial.print(tmYearToCalendar(tm.Year));
+  Serial.println();
+*/
+// ### Serial Code end ###
+// ### LCD Code ###
+  lcd.setCursor(5 ,1);
+  if((tm.Hour) < 10) 
+  {
+  lcd.print(“0”);
+  }
+lcd.print(tm.Hour);
+lcd.print(“:”);
+if((tm.Minute) < 10) 
+  {
+  lcd.print(“0”);
+  }
+lcd.print(tm.Minute);
+lcd.setCursor(0, 0);
+  if (dayofweek == 1) 
+  {
+  lcd.print(“Mon”);
+  }
+  if (dayofweek == 2) 
+  {
+lcd.print(“Tus”);
+}
+  if (dayofweek == 3) 
+  {
+  lcd.print(“Wed”);
+  }
+if (dayofweek == 4) 
+  {
+  lcd.print(“Thu”);
+  }
+if (dayofweek == 5) 
+  {
+  lcd.print(“Fri”);
+  }
+if (dayofweek == 6) 
+  {
+  lcd.print(“Sat”);
+  }
+if (dayofweek == 7) 
+  {
+  lcd.print(“Sun”);
+  }
+if (dayofweek > 7) 
+  {
+  lcd.print(“Err”);
+  }
+if (dayofweek < 0) 
+  {
+  lcd.print(“Err”);
+  }
+lcd.setCursor(6, 0);
+if((tm.Day) < 10) 
+  {
+  lcd.print(“0”);
+  }
+lcd.print(tm.Day);
+lcd.print(“/”);
+if((tm.Month) < 10) 
+  {
+  lcd.print(“0”);
+  }
+lcd.print(tm.Month);
+lcd.print(“/”);
+lcd.print(tmYearToCalendar(tm.Year));
+lcd.print(” “);
+// ### LCD Code End ###
+// ##### Calculating Day of week ###
+// IF time is midnight then add 1 to dayof week
+if ((tm.Hour) == 0 && (tm.Minute) == 0 && (tm.Second) == 0) 
+  {
+  dayofweek = dayofweek + 1;
+  }
+//If dayofweek is larger than 7 for smaller than 1 then set it back to 1
+  if (dayofweek > 7 || dayofweek < 1) 
+  {
+  dayofweek = 1;
+  }
+// ### Day of week END ###
+// ### Error Messages ###
+  } else 
+  {
+if (RTC.chipPresent()) 
+ {
+  Serial.println(“The DS1307 is stopped. Please run the SetTime”);
+  Serial.println(“example to initialize the time and begin running.”);
+  Serial.println();
+  } else 
+  {
+  Serial.println(“DS1307 read error! Please check the circuitry.”);
+  Serial.println();
+  }
+delay(9000);
+}
+// ### Error emssages END ###
+// ### Pulseing Colon Code ###
+delay(500);
+lcd.setCursor(7, 1);
+lcd.print(” “);
+delay(500);
+}
+// ### Pulsing Colon Code END ###
+void print2digits(int number) {
+if (number >= 0 && number < 10) 
+  {
+  Serial.write(‘0’);
+  }
+Serial.print(number);
+}
