@@ -17,7 +17,8 @@ void setup()
   URTCLIB_WIRE.begin();
   // Comment out below line once you set the date & time.
   // Following line sets the RTC with an explicit date & time
-  // rtc.set(0, 53, 14, 4, 29, 3, 23);
+  //(29.3.23 || klo 16.5.00)
+  //rtc.set(0, 5, 16, 4, 29, 3, 23);
   // rtc.set(second, minute, hour, dayOfWeek, dayOfMonth, month, year)
   // set day of week (1=Sunday, 7=Saturday)
 
