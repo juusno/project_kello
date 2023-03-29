@@ -25,14 +25,13 @@ void setup()
 
 void loop()
 {
-  lcd.setCursor(0,1);
-  TimetoLcd();
+  rtc.refresh();
+  DaytoLcd();
 }
 
-  void TimetoLcd()
+  void DaytoLcd()
   {
-    rtc.refresh();
-    
+    lcd.setCursor(0,1);
     lcd.print(daysOfTheWeek[rtc.dayOfWeek()-1]);
     lcd.print(" ");
     lcd.print(rtc.day());
@@ -41,11 +40,8 @@ void loop()
     lcd.print('/');
     lcd.print(rtc.year());
 
-    
-    //lcd.println(daysOfTheWeek[rtc.dayOfWeek()-1]);
-    
-
-    lcd.print(" | klo: ");
+    lcd.setCursor(0,0);
+    lcd.print("klo: ");
     lcd.print(rtc.hour());
     lcd.print(':');
     lcd.print(rtc.minute());
