@@ -11,7 +11,7 @@ LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 
 void setup() {
   Serial.begin(9600);
-  analogWrite(7, Contrast);
+  analogWrite(7, Contrast); // Connect the LCD screen's contrast to digital pin 7
   lcd.begin(16, 2);
   URTCLIB_WIRE.begin();
   // Comment out below line once you set the date & time.
@@ -32,10 +32,19 @@ void DaytoLcd()
     lcd.setCursor(0,1);
     lcd.print(daysOfTheWeek[rtc.dayOfWeek()-1]);
     lcd.print(" ");
+    if (rtc.day() < 10) {
+      lcd.print(0);
+    }
     lcd.print(rtc.day());
     lcd.print('/');
+    if (rtc.month() < 10) {
+      lcd.print(0);
+    }
     lcd.print(rtc.month());
     lcd.print('/');
+    if (rtc.year() < 10) {
+      lcd.print(0);
+    }
     lcd.print(rtc.year());
 
     lcd.setCursor(0,0);
@@ -54,3 +63,4 @@ void DaytoLcd()
     }
     lcd.print(rtc.second());  
   };
+  
